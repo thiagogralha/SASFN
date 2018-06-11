@@ -1,0 +1,69 @@
+﻿<form role="form" name="formPlano">
+
+    <div class="form-group">
+
+        <div class="row">
+
+            <div class="col-md-6">
+                <label>Nome:<span class="obrigatorio">*</span></label>
+                <input name="Nome"
+                       type="text"
+                       class="form-control"
+                       id="Nome"
+                       maxlength="100"
+                       data-ng-model="model.Plano.Nome"
+                       data-ng-required="true" />
+                <span ng-show="formPlano.Nome.$error.required" class="text-danger">Nome é Obrigatório</span>
+
+            </div>
+
+            <div class="col-md-6">
+                <label>Ativo:</label>
+                <select class="form-control"
+                        name="Ativo"
+                        id="Ativo"
+                        data-ng-model="model.Plano.Ativo"
+                        data-ng-required="true">
+                    <option value="S">Ativo</option>
+                    <option value="N">Inativo</option>
+                </select>
+                <span ng-show="formPlano.Ativo.$error.required" class="text-danger">Campo Obrigatório</span>
+            </div>
+
+
+
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <label>Valor:<span class="obrigatorio">*</span></label>
+                <input name="Valor"
+                       type="number"
+                       class="form-control"
+                       id="Valor"
+                       maxlength="10"
+                       data-ng-model="model.Plano.Valor"
+                       data-ng-required="true" />
+                <span ng-show="formPlano.Valor.$error.required" class="text-danger">Valor é Obrigatório</span>
+
+            </div>
+
+            <div class="col-md-6">
+                <label>Plano Familia?:</label>
+                <select class="form-control"
+                        name="IsFamilar"
+                        id="IsFamilar"
+                        data-ng-model="model.Plano.IsFamilar"
+                        data-ng-required="true">
+                    <option value="S">Sim</option>
+                    <option value="N">Não</option>
+                </select>
+                <span ng-show="formPlano.IsFamilar.$error.required" class="text-danger">Campo Obrigatório</span>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="row"></div>
+</form>

@@ -1,0 +1,132 @@
+﻿@model SASF.MVC.ViewModels.FuncionarioViewModel
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SASF – Login</title>
+</head>
+<body>
+    <link href="/Content/animations.css" rel="stylesheet" type="text/css">
+    <link href="~/Content/animations.css" rel="stylesheet" />
+
+    @{
+        @Styles.Render("~/Login/css")
+        Layout = null;
+    }
+
+    @Scripts.Render("~/bundles/angular")
+    @Scripts.Render("~/Login/js")
+
+    <div ng-app="LoginApp" ng-controller="LoginCtrl">
+
+        @if (Request.Cookies[".ASPXAUTH"] != null)
+        {
+            <div class="limiter">
+                <div class="container-login100">
+                    <div class="wrap-login100 p-l-85 p-r-85 p-t-55 p-b-55">
+
+                        <span >
+                            Você permaneceu logado por muito tempo, volte e se logue novamente.
+                        </span>
+                        <hr />
+
+                        <div class="container-login100-form-btn">
+
+                            @*<button type="button" onclick="history.go(-1)" class="login100-form-btn">
+                                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Voltar
+                            </button>*@
+
+                            <a href="~/Login/LogOff">
+                                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Voltar
+                            </a>
+
+
+                        </div>
+
+                        {{Mensagem}}
+
+                    </div>
+                </div>
+            </div>
+        }
+
+        <form name="formDados" novalidate>
+
+            <div class="limiter">
+                <div class="container-login100">
+                    <div class="wrap-login100 p-l-85 p-r-85 p-t-55 p-b-55">
+
+                        <span class="login100-form-title p-b-32">
+                            Fazer Login
+                        </span>
+
+                        <span class="txt1 p-b-11">
+                            Usuário
+                        </span>
+                        <div class="wrap-input100 validate-input m-b-36" data-validate="Username is required">
+
+                            <input name="Login"
+                                   type="text"
+                                   class="input100"
+                                   id="Login"
+                                   maxlength="20"
+                                   data-ng-model="model.Login"
+                                   data-ng-required="true" />
+
+                            <span class="focus-input100"></span>
+                        </div>
+
+                        <span class="txt1 p-b-11">
+                            Senha
+                        </span>
+                        <div class="wrap-input100 validate-input m-b-12" data-validate="Password is required">
+                            <span class="btn-show-pass">
+                                <i class="fa fa-eye"></i>
+                            </span>
+
+                            <input name="Senha"
+                                   type="password"
+                                   class="input100"
+                                   id="Senha"
+                                   maxlength="8"
+                                   data-ng-model="model.Senha"
+                                   data-ng-required="true" />
+
+                            <span class="focus-input100"></span>
+                        </div>
+
+                        <div class="flex-sb-m w-full p-b-48">
+                            <div class="contact100-form-checkbox">
+                                <input class="input-checkbox100" id="ckb1" type="checkbox" name="remember-me">
+                                <label class="label-checkbox100" for="ckb1">
+                                    Lembrar
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="container-login100-form-btn">
+
+                            <button type="button" data-ng-show="!loader" data-ng-click="Logar()" class="login100-form-btn">
+                                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Entrar
+                            </button>
+                            <div class="center" data-ng-show="loader">
+                                <img src="~/Images/ajax-loader.gif" />
+                            </div>
+
+                        </div>
+
+                        {{Mensagem}}
+
+                    </div>
+                </div>
+            </div>
+            <div id="dropDownSelect1"></div>
+
+        </form>
+
+    </div>
+</body>
+</html>
+

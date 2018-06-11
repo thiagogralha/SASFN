@@ -1,0 +1,153 @@
+﻿@model IEnumerable<SASF.MVC.ViewModels.FuncionarioViewModel>
+
+<h2>Cadastro de Funcionarios</h2>
+<link href="/Content/animations.css" rel="stylesheet" type="text/css">
+<link href="~/Content/animations.css" rel="stylesheet" />
+@section Scripts {
+    @Scripts.Render("~/bundles/angular")
+    @Scripts.Render("~/bundles/angularFuncionarios")
+}
+
+
+<div ng-app="FuncionariosApp" ng-controller="FuncionariosCtrl">
+
+    <form name="formDados" novalidate>
+
+        <fieldset class="scheduler-border">
+            <legend class="scheduler-border">Pesquisar</legend>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="control-label">Funcionario:</label>
+
+                        <input class="form-control" type="search" ng-model="procurar" placeholder="Pesquisar Funcionário" aria-label="Pesquisar Funcionario do Cliente" ng-maxlength="100" />
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <button type="button" data-ng-click="abrirModalInclusao()" class="btn btn-primary">
+                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Criar Novo Funcionario
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+
+        <fieldset class="scheduler-border">
+            <legend class="scheduler-border">Registros</legend>
+
+            @*INFO: Alerta*@
+            <div class="row" data-ng-show="mensagem.erro">
+                <div class="col-md-12">
+                    <div class="alert alert-dismissable alert-danger">
+                        <h4>Atenção!</h4>
+                        {{ mensagem.erro }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="alert alert-dismissable alert-info">
+                        <h4>Atenção!</h4>
+                       * Somente Perfil Admin terá acesso a exclusão e edição de Fichas.<br />
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <tr class="active">
+                        <th style="cursor:pointer" ng-click="ordenar('FuncionarioId')">Código <span class="glyphicon glyphicon-sort"></span></th>
+                        <th style="cursor:pointer" ng-click="ordenar('Nome')">Nome do Funcionário <span class="glyphicon glyphicon-sort"></span></th>
+                        <th style="cursor:pointer" ng-click="ordenar('Login')">Login <span class="glyphicon glyphicon-sort"></span></th>
+                        <th style="cursor:pointer" ng-click="ordenar('Email')">Email <span class="glyphicon glyphicon-sort"></span></th>
+                        <th>Ações</th>
+                    </tr>
+                    <tr class="animate-repeat" dir-paginate="funcionario in funcionarios | filter:procurar | orderBy:sortKey:reverse | itemsPerPage:10 ">
+
+                        <td> {{funcionario.FuncionarioId}}</td>
+                        <td>{{funcionario.Nome}}</td>
+                        <td>{{funcionario.Login}}</td>
+                        <td>{{funcionario.Email}}</td>
+
+                        <td>
+                            <div class="row">
+
+                                <div class="col-md-3">
+                                    <button id="btnExcluir_{{funcionario.FuncionarioId}}" data-ng-click="excluir(funcionario.FuncionarioId)" class="btn btn-danger">
+                                        <i class="glyphicon glyphicon-trash"></i>
+                                    </button>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <button id="btnEditar_{{funcionario.FuncionarioId}}" data-ng-click="abrirModalEdicao(funcionario)" class="btn btn-default">
+                                        <i class="glyphicon glyphicon-edit"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                        </td>
+                    </tr>
+
+                </table>
+                <div class="alert alert-danger animate-repeat" ng-if="funcionarios.length === 0">
+                    <strong>Nenhum registro encontrado...</strong>
+                </div>
+
+                <dir-pagination-controls max-size="5" boundary-links="true"></dir-pagination-controls>
+
+                <p>
+                    <b>Qtde. Funcionarios:</b> {{funcionarios.length}}
+                </p>
+
+            </div>
+
+        </fieldset>
+
+    </form>
+
+    @*MODAL RESPONSÁVEL POR INCLUIR UM FUNCIONÁRIO*@
+    <div class="modal fade" id="ModalInclusao" data-keyboard="false" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" data-ng-click="cancelarInclusao()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        <span class="glyphicon glyphicon-ok" aria-hidden="true"></span> {{ labels.operacao}}
+                    </h4>
+                </div>
+
+                <div class="modal-body">
+
+                    @Html.Partial("Partial_DadosFuncionario/_DadosFuncionario")
+
+                </div>
+
+                <div class="modal-footer">
+
+                    <div class="form-group" data-ng-show="!show.loader">
+                        <button type="submit"
+                                class="btn btn-default"
+                                id="buttonConfirmaInclusao"
+                                data-ng-click="confirmarInclusao()"
+                                data-ng-disabled="formFuncionario.$invalid">
+                            {{ labels.botaoIncluir }}
+                        </button>
+                        <button class="btn btn-default" id="buttonCancelaInclusao" data-ng-click="cancelarInclusao()">Cancelar</button>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+

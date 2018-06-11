@@ -1,0 +1,101 @@
+﻿<form role="form" name="formFuncionario">
+
+    <div class="form-group">
+
+        <div class="row">
+
+            <div class="col-md-6">
+                <label>Nome Completo:<span class="obrigatorio">*</span></label>
+                <input name="Nome"
+                       type="text"
+                       class="form-control"
+                       id="Nome"
+                       maxlength="100"
+                       data-ng-model="model.Funcionario.Nome"
+                       data-ng-required="true" />
+                <span ng-show="formFuncionario.Nome.$error.required" class="text-danger">Nome é Obrigatório</span>
+
+            </div>
+
+            <div class="col-md-6">
+                <label>Email:<span class="obrigatorio">*</span></label>
+                <input name="Email"
+                       type="email"
+                       class="form-control"
+                       id="Email"
+                       maxlength="150"
+                       data-ng-model="model.Funcionario.Email"
+                       data-ng-required="true" />
+                <span ng-show="formFuncionario.Email.$error.required" class="text-danger">Email é Obrigatório</span>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="form-group">
+
+        <div class="row">
+
+            <div class="col-md-6">
+                <label>Login:<span class="obrigatorio">*</span></label>
+                <input name="Login"
+                       type="text"
+                       class="form-control"
+                       id="Login"
+                       maxlength="20"
+                       data-ng-model="model.Funcionario.Login"
+                       data-ng-required="true" />
+                <span ng-show="formFuncionario.Login.$error.required" class="text-danger">Login é Obrigatório</span>
+            </div>
+
+            <div class="col-md-6">
+                <label>Senha:<span class="obrigatorio">*</span></label>
+                <input name="Senha"
+                       type="password"
+                       class="form-control"
+                       id="Senha"
+                       maxlength="8"
+                       data-ng-model="model.Funcionario.Senha"
+                       data-ng-required="true" />
+                <span ng-show="formFuncionario.Senha.$error.required" class="text-danger">Senha é Obrigatório</span>
+
+            </div>
+        </div>
+
+    </div>
+
+    <div class="form-group">
+
+        <div class="row">
+
+            <div class="col-md-6">
+                <label>Token:</label>
+                <input name="Token"
+                       type="text"
+                       class="form-control"
+                       id="Token"
+                       maxlength="5"
+                       data-ng-model="model.Funcionario.Token" />
+
+            </div>
+
+            <div class="col-md-6">
+                <label>Administrador?:</label>
+                <select class="form-control"
+                        name="Ativo"
+                        id="Ativo"
+                        data-ng-model="model.Funcionario.IsAdmin"
+                        data-ng-required="true">
+                    <option value="S">Sim</option>
+                    <option value="N">Não</option>
+                </select>
+                <span ng-show="formFuncionario.IsAdmin.$error.required" class="text-danger">Campo Obrigatório</span>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="row"></div>
+</form>

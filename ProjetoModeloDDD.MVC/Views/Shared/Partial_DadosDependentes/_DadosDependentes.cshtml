@@ -1,0 +1,221 @@
+﻿<form role="form" name="formDependente">
+
+    <div class="form-group">
+
+        <div class="row">
+
+            <input type="hidden" id="FichaId" name="FichaId" data-ng-model="model.Dependentes.FichaId" />
+
+            <div class="col-md-4">
+                <label>Nome Completo:<span class="obrigatorio">*</span></label>
+                <input name="NomeCompletoDep"
+                       type="text"
+                       class="form-control"
+                       id="NomeCompletoDep"
+                       maxlength="200"
+                       data-ng-model="model.Dependentes.NomeCompletoDep"
+                       data-ng-required="true" />
+                <span ng-show="formDependente.NomeCompletoDep.$error.required" class="text-danger">Nome é Obrigatório</span>
+
+            </div>
+
+            <div class="col-md-4">
+                <label>CPF:<span class="obrigatorio">*</span></label>
+                <input name="CPFDep"
+                       type="text"
+                       class="form-control"
+                       id="CPFDep"
+                       data-ng-model="model.Dependentes.CPFDep"
+                       data-ng-required="true"
+                       cpf-valido
+                       ui-mask="999.999.999-99" />
+                <span ng-show="formDependente.CPFDep.$error.required" class="text-danger">CPF é Obrigatório</span>
+                <span ng-show="formDependente.CPFDep.$error.cpfValido" class="text-danger">CPF Inválido</span>
+            </div>
+
+            <div class="col-md-4">
+                <label>Cep:<span class="obrigatorio">*</span></label>
+                <input name="CepDep"
+                       type="text"
+                       class="form-control"
+                       id="CepDep"
+                       maxlength="15"
+                       data-ng-model="model.Dependentes.CepDep"
+                       data-ng-required="true"
+                       ng-blur="ObterEnderecoPorCEPDependentes(model.Dependentes.CepDep)" />
+                <div class="center" data-ng-show="loaderCEP">
+                    <img src="~/Images/ajax-loader.gif" />
+                </div>
+                <span ng-show="formDependente.CepDep.$error.required" class="text-danger">Cep é Obrigatório</span>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="form-group">
+
+        <div class="row">
+
+            <div class="col-md-4">
+                <label>Endereco:<span class="obrigatorio">*</span></label>
+                <input name="EnderecoDep"
+                       type="text"
+                       class="form-control"
+                       id="EnderecoDep"
+                       maxlength="150"
+                       data-ng-model="model.Dependentes.EnderecoDep"
+                       data-ng-required="true" />
+                <span ng-show="formDependente.EnderecoDep.$error.required" class="text-danger">Endereço é Obrigatório</span>
+
+            </div>
+
+            <div class="col-md-4">
+                <label>Bairro:<span class="obrigatorio">*</span></label>
+                <input name="BairroDep"
+                       type="text"
+                       class="form-control"
+                       id="BairroDep"
+                       maxlength="50"
+                       data-ng-model="model.Dependentes.BairroDep"
+                       data-ng-required="true" />
+                <span ng-show="formDependente.BairroDep.$error.required" class="text-danger">Bairro é Obrigatório</span>
+            </div>
+
+            <div class="col-md-4">
+                <label>Complemento:</label>
+                <input name="ComplementoDep"
+                       type="text"
+                       class="form-control"
+                       id="ComplementoDep"
+                       maxlength="100"
+                       data-ng-model="model.Dependentes.ComplementoDep" />
+            </div>
+        </div>
+
+    </div>
+
+    <div class="form-group">
+
+        <div class="row">
+
+            <div class="col-md-4">
+                <label>Estado:<span class="obrigatorio">*</span></label>
+                <input name="EstadoDep"
+                       type="text"
+                       class="form-control"
+                       id="EstadoDep"
+                       maxlength="50"
+                       data-ng-model="model.Dependentes.EstadoDep"
+                       data-ng-required="true" />
+                <span ng-show="formDependente.EstadoDep.$error.required" class="text-danger">Estado é Obrigatório</span>
+
+            </div>
+
+            <div class="col-md-4">
+                <label>Cidade:<span class="obrigatorio">*</span></label>
+                <input name="CidadeDep"
+                       type="text"
+                       class="form-control"
+                       id="CidadeDep"
+                       maxlength="50"
+                       data-ng-model="model.Dependentes.CidadeDep"
+                       data-ng-required="true" />
+                <span ng-show="formDependente.CidadeDep.$error.required" class="text-danger">Cidade é Obrigatório</span>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="form-group">
+
+        <div class="row">
+
+            <div class="col-md-4">
+                <label>Telefone:<span class="obrigatorio">*</span></label>
+                <input name="TelefoneDep"
+                       type="text"
+                       class="form-control"
+                       id="TelefoneDep"
+                       data-ng-model="model.Dependentes.TelefoneDep"
+                       data-ng-required="true"
+                       ui-mask="(999) 99999999?9" />
+                <span ng-show="formDependente.TelefoneDep.$error.required" class="text-danger">Telefone é Obrigatório</span>
+
+            </div>
+
+            <div class="col-md-4">
+                <label>Telefone Opcional:</label>
+                <input name="TelefoneOpcionalDep"
+                       type="text"
+                       class="form-control"
+                       id="TelefoneOpcionalDep"
+                       ui-mask="(999) 99999999?9"
+                       data-ng-model="model.Dependentes.TelefoneOpcionalDep" />
+
+            </div>
+
+            <div class="col-md-4">
+                <label>Data de Nascimento:<span class="obrigatorio">*</span></label>
+                <input name="DataNascimentoDep"
+                       type="text"
+                       class="form-control"
+                       id="DataNascimentoDep"
+                       data-ng-model="model.Dependentes.DataNascimentoDep"
+                       data-ng-required="true"
+                       data-ng-pattern='/^(0?[1-9]|[12][0-9]|3[01])\/(0?[1-9]|1[012])\/(19\d\d|20\d\d)$/' />
+                <span ng-show="formDependente.DataNascimentoDep.$error.required" class="text-danger">Data de Nascimento é Obrigatório</span>
+                <span ng-show="formDependente.DataNascimentoDep.$error.pattern" class="text-danger">Data está em um formato incorreto. (dd/mm/aaaa).</span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="form-group">
+
+        <div class="row">
+
+            <div class="col-md-4">
+                <label>E-mail:</label>
+                <input name="EmailDep"
+                       type="email"
+                       class="form-control"
+                       id="EmailDep"
+                       maxlength="50"
+                       data-ng-model="model.Dependentes.EmailDep" />
+                <span ng-show="formDependente.EmailDep.$error.email" class="text-danger">Preencha o e-mail corretamente</span>
+
+            </div>
+
+            <div class="col-md-4">
+                <label>Naturalidade:<span class="obrigatorio">*</span></label>
+                <input name="NaturalidadeDep"
+                       type="text"
+                       class="form-control"
+                       id="NaturalidadeDep"
+                       data-ng-model="model.Campanha.NaturalidadeDep"
+                       data-ng-required="true" />
+                <span ng-show="formDependente.NaturalidadeDep.$error.required" class="text-danger">Naturalidade é Obrigatório</span>
+
+            </div>
+
+            <div class="col-md-4">
+                <label>Nacionalidade:<span class="obrigatorio">*</span></label>
+                <input name="NacionalidadeDep"
+                       type="text"
+                       class="form-control"
+                       id="NacionalidadeDep"
+                       data-ng-model="model.Campanha.NacionalidadeDep"
+                       data-ng-required="true" />
+                <span ng-show="formDependente.NacionalidadeDep.$error.required" class="text-danger">Nacionalidade é Obrigatório</span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="row"></div>
+</form>

@@ -1,0 +1,44 @@
+﻿@model SASF.MVC.ViewModels.FichaViewModel
+@{
+    Layout = null;
+}
+
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=8">
+    <meta name="generator" content="BCL easyConverter SDK 5.0.08">
+</head>
+
+<body>
+
+
+    <table>
+        <tr>FICHA PRINCIPAL:</tr>
+        <tr>
+            @Model.NomeCompleto - @Model.CPF
+        </tr>
+        <tr></tr>
+        <tr></tr>
+        <tr>  DETALHES DO TÍTULO:</tr>
+        <tr></tr>
+        <thead>
+            @foreach (var item in Model.Titulos)
+            {
+                <tr>
+                    <th style="background-color: #fcfcfc; border: solid 1px #ccc; width: 220px;">Código do Título -> @item.TituloId</th>
+                </tr>
+
+                <tr>Mês - @item.Mes</tr>
+                <tr>Status - @item.Status</tr>
+                <tr>Valor - @item.Valor</tr>
+                <tr>Data da Baixa - @item.DataBaixa</tr>
+
+            }
+        </thead>
+
+    </table>
+
+
+</body>
+</html>

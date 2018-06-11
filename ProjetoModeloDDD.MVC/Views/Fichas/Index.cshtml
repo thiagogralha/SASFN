@@ -1,0 +1,391 @@
+﻿@model IEnumerable<SASF.MVC.ViewModels.FichaViewModel>
+
+<h2>Cadastro de Fichas</h2>
+<link href="/Content/animations.css" rel="stylesheet" type="text/css">
+<link href="~/Content/animations.css" rel="stylesheet" />
+@section Scripts {
+    @Scripts.Render("~/bundles/angular")
+    @Scripts.Render("~/bundles/angularFichas")
+}
+
+
+<div ng-app="FichasApp" ng-controller="FichasCtrl">
+
+    <form name="formDados" novalidate>
+
+        <fieldset class="scheduler-border">
+            <legend class="scheduler-border">Pesquisar</legend>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="control-label">Ficha:</label>
+
+                        <input class="form-control" type="search" ng-model="procurar" placeholder="Pesquisar Fichas" aria-label="Pesquisar Ficha do Cliente" ng-maxlength="100" />
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <button type="button" data-ng-click="abrirModalInclusao()" class="btn btn-primary">
+                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Criar Nova Ficha
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+
+
+        <fieldset class="scheduler-border">
+            <legend class="scheduler-border">Registros</legend>
+
+            @*INFO: Alerta*@
+            <div class="row" data-ng-show="mensagem.erro">
+                <div class="col-md-12">
+                    <div class="alert alert-dismissable alert-danger">
+                        <h4>Atenção!</h4>
+                        {{ mensagem.erro }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+
+                <div class="center" data-ng-show="loader">
+                    <img src="~/Images/ajax-loader.gif" />
+                </div>
+
+                <table class="table table-hover" data-ng-show="!loader">
+                    <tr class="active">
+                        <th style="cursor:pointer" ng-click="ordenar('Id')">Código <span class="glyphicon glyphicon-sort"></span></th>
+                        <th style="cursor:pointer" ng-click="ordenar('NomeCompleto')">Nome do Usuario <span class="glyphicon glyphicon-sort"></span></th>
+                        <th style="cursor:pointer" ng-click="ordenar('CPF')">CPF <span class="glyphicon glyphicon-sort"></span></th>
+                        <th style="cursor:pointer" ng-click="ordenar('Telefone')">Telefone <span class="glyphicon glyphicon-sort"></span></th>
+                        <th>Dependentes</th>
+                        <th>Ações</th>
+                    </tr>
+                    <tr class="animate-repeat" dir-paginate="ficha in fichas | filter:procurar | orderBy:sortKey:reverse | itemsPerPage:15 ">
+
+                        <td> {{ficha.FichaId}}</td>
+                        <td>{{ficha.NomeCompleto}}</td>
+                        <td>{{ficha.CPF}}</td>
+                        <td>{{ficha.Telefone}}</td>
+
+
+                        <td>
+                            <div class="col-md-3" data-ng-show="ficha.Dependentes.length > 0">
+                                <button id="btnVisualizarDependentes" data-ng-click="abrirModalVisualizarDependentes(ficha.Dependentes, ficha.NomeCompleto)" class="btn btn-info">
+                                    <i class="glyphicon glyphicon-eye-open"></i>
+                                </button>
+                            </div>
+
+                            <div class="col-md-3" data-ng-show="ficha.Plano.IsFamilar == 'S'">
+                                <button id="btnAdicionarDependentes" data-ng-click="abrirModalInclusaoDependentes(ficha.FichaId)" class="btn btn-primary">
+                                    <i class="glyphicon glyphicon-plus-sign"></i>
+                                </button>
+                            </div>
+
+                        </td>
+
+                        <td>
+                            <div class="row">
+
+                                @*<div class="col-md-2">
+                                    <button id="btnExcluir" data-ng-click="excluir(ficha.FichaId)" class="btn btn-danger">
+                                        <i class="glyphicon glyphicon-trash"></i>
+                                    </button>
+                                </div>*@
+
+                                <div class="col-md-3">
+                                    <button id="btnEditar" data-ng-click="abrirModalEdicao(ficha)" class="btn btn-default">
+                                        <i class="glyphicon glyphicon-edit"></i>
+                                    </button>
+                                </div>
+
+                                <div class="col-md-2">
+                                    <a href="@Url.Action("ExportarCSV")/{{ficha.FichaId}}" id="btnExportar" class="btn btn-default">
+                                        <i class="glyphicon glyphicon-export"></i>
+                                    </a>
+                                </div>
+
+                                <div class="col-md-2">
+
+                                    <button id="btnVisualizarTitulos" data-ng-click="abrirModalVisualizarTitulos(ficha.FichaId)" class="btn btn-success">
+                                        <i class="glyphicon glyphicon-usd"></i>
+                                    </button>
+
+                                </div>
+                            </div>
+
+                        </td>
+                    </tr>
+
+                </table>
+                <div class="alert alert-danger animate-repeat" ng-if="fichas.length === 0">
+                    <strong>Nenhum registro encontrado...</strong>
+                </div>
+
+                <dir-pagination-controls max-size="5" boundary-links="true"></dir-pagination-controls>
+
+                <p>
+                    <b>Qtde. Fichas:</b> {{fichas.length}}
+                </p>
+
+            </div>
+
+        </fieldset>
+
+        <fieldset class="scheduler-border">
+            <legend class="scheduler-border">Legenda</legend>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="alert alert-dismissable alert-info">
+                        <h4>Atenção <i class="glyphicon glyphicon-exclamation-sign"></i> </h4>
+                        <p><b> <i class="glyphicon glyphicon-info-sign"></i> Informações referente a cada Botão</b></p>
+                        <p><button class="btn btn-info" disabled><i class="glyphicon glyphicon-eye-open"></i> </button> Visualização de Dependentes  <i>(só aparece se possuir pelo menos 1 dependente)</i> </p>
+                        <p><button class="btn btn-primary" disabled><i class="glyphicon glyphicon-plus-sign"></i> </button> Adicionar Dependentes <i>(só aparece se o plano for FAMILIAR)</i> </p>
+                        @*<p> <button class="btn btn-danger" disabled> <i class="glyphicon glyphicon-trash"></i> </button> Excluir a Ficha</p>*@
+                        <p> <button class="btn btn-default" disabled> <i class="glyphicon glyphicon-edit"></i> </button> Editar a Ficha</p>
+                        <p> <button class="btn btn-default" disabled> <i class="glyphicon glyphicon-export"></i> </button> Exportar Contrato</p>
+                        <p> <button class="btn btn-success" disabled> <i class="glyphicon glyphicon-usd"></i> </button> Visualizar Título</p>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+
+    </form>
+
+    @*MODAL RESPONSÁVEL POR INCLUIR UMA FICHA*@
+    <div class="modal fade" id="ModalInclusao" data-keyboard="false" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-body modal-sm">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" data-ng-click="cancelarInclusao()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        <span class="glyphicon glyphicon-ok" aria-hidden="true"></span> {{ labels.operacao}}
+                    </h4>
+                </div>
+
+                <div class="modal-body">
+
+                    @Html.Partial("Partial_DadosFicha/_DadosFicha")
+
+                </div>
+
+                <div class="modal-footer">
+
+                    <div class="form-group" data-ng-show="!show.loader">
+                        <button type="submit"
+                                class="btn btn-default"
+                                id="buttonConfirmaInclusao"
+                                data-ng-click="confirmarInclusao()"
+                                data-ng-disabled="formCampanha.$invalid">
+                            {{ labels.botaoIncluir }}
+                        </button>
+                        <button class="btn btn-default" id="buttonCancelaInclusao" data-ng-click="cancelarInclusao()">Cancelar</button>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    @*MODAL RESPONSÁVEL POR VISUALIZAR UM DEPENDENTE*@
+    <div class="modal fade" id="ModalVisualizarDependentes" data-keyboard="false" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-body modal-sm">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" data-ng-click="cancelarInclusaoDependente()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        <span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Visualização dos Dependentes do <i> {{model.Dependentes.Pai}} </i>
+                    </h4>
+                </div>
+
+                <div class="modal-body">
+
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <tr class="active">
+                                <th>Código do Dependente</th>
+                                <th>Nome do Dependente </th>
+                                <th>Telefone </th>
+                                <th>E-mail</th>
+                                <th>Ações</th>
+
+                            </tr>
+                            <tr class="animate-repeat" ng-repeat="dependente in model.Dependentes ">
+
+                                <td> {{dependente.DependenteId}}</td>
+                                <td>{{dependente.NomeCompletoDep}}</td>
+                                <td>{{dependente.TelefoneDep}}</td>
+                                <td>{{dependente.EmailDep}}</td>
+
+                                <td>
+                                    <div class="row">
+
+                                        <div class="col-md-3">
+                                            <button id="btnExcluirDependente" data-ng-click="excluirDependente(dependente)" class="btn btn-danger">
+                                                <i class="glyphicon glyphicon-trash"></i>
+                                            </button>
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <button id="btnEditarDependente" data-ng-click="abrirModalEdicaoDependente(dependente)" class="btn btn-default">
+                                                <i class="glyphicon glyphicon-edit"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                        <div class="alert alert-danger animate-repeat" ng-if="model.Dependentes.length == 0">
+                            <strong>Nenhum registro encontrado...</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+
+                    <div class="form-group">
+
+                        <button type="button" class="btn btn-default" data-ng-click="cancelarInclusaoDependente()" data-dismiss="modal" aria-label="Close">Fechar</button>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    @*MODAL RESPONSÁVEL POR INCLUIR UM DEPENDENTE*@
+    <div class="modal fade" id="ModalInclusaoDependentes" data-keyboard="false" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-body modal-sm">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" data-ng-click="cancelarInclusaoDependente()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        <span class="glyphicon glyphicon-ok" aria-hidden="true"></span> {{ labels.operacao}}
+                    </h4>
+                </div>
+
+                <div class="modal-body">
+
+                    @Html.Partial("Partial_DadosDependentes/_DadosDependentes")
+
+                </div>
+
+                <div class="modal-footer">
+
+                    <div class="form-group" data-ng-show="!show.loader">
+                        <button type="submit"
+                                class="btn btn-default"
+                                id="buttonConfirmaInclusaoDependente"
+                                data-ng-click="confirmarInclusaoDependente()"
+                                data-ng-disabled="formDependente.$invalid">
+                            {{ labels.botaoIncluir }}
+                        </button>
+                        <button class="btn btn-default" id="buttonCancelaInclusaoDependente" data-ng-click="cancelarInclusaoDependente()">Cancelar</button>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    @*MODAL RESPONSÁVEL POR VISUALIZAR OS TÍTULOS*@
+    <div class="modal fade" id="ModalVisualizarTitulos" data-keyboard="false" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-body modal-sm">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" data-ng-click="cancelarInclusaoTitulos()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <div>
+                        <h4 class="modal-title" id="myModalLabel">
+                            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Visualização dos Títulos
+                        </h4>
+                    </div>
+
+                    <div data-ng-show="model.Titulos.length > 0">
+                        <h5 class="modal-title" id="myModalLabel">
+
+                            <a href="@Url.Action("ExportarTitulos")/{{model.Titulos[0].FichaId}}" id="btnExportarTitulos" class="btn btn-success">
+                                <i class="glyphicon glyphicon-share"></i> Exportar Todos os Titulos
+                            </a>
+                        </h5>
+                    </div>
+
+                </div>
+
+                <div class="modal-body">
+
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <tr class="active">
+                                <th>Código</th>
+                                <th>Status</th>
+                                <th>Valor</th>
+                                <th>Plano</th>
+                                <th>Data do Cadastro</th>
+                                <th>Data da Baixa</th>
+                                <th>Mês / Ano</th>
+                            </tr>
+                            <tr class="animate-repeat" ng-repeat="titulo in model.Titulos ">
+
+                                <td> {{titulo.TituloId}}</td>
+
+                                <td>
+                                    <div class="row">
+
+                                        <div class="col-md-9">
+
+                                            <select class="form-control"
+                                                    name="Status"
+                                                    id="Status"
+                                                    data-ng-model="titulo.Status"
+                                                    ng-change="confirmarAlteracao(titulo)">
+                                                <option value="P">Pendente Pagamento</option>
+                                                <option value="B">Baixado</option>
+                                            </select>
+                                        </div>
+
+                                    </div>
+
+                                </td>
+
+                                <td>{{titulo.Valor | currency:"R$ "}}</td>
+                                <td> {{titulo.PlanoNome}}</td>
+                                <td>{{titulo.DataCadastro | date:'dd/MM/yyyy'}}</td>
+                                <td>{{titulo.DataBaixa  ? (titulo.DataBaixa | date:'dd/MM/yyyy')  : "---"}}</td>
+                                <td>{{titulo.Mes}} / {{titulo.Ano}}</td>
+
+                            </tr>
+                        </table>
+                        <div class="alert alert-danger animate-repeat" ng-if="model.Titulos.length == 0">
+                            <strong>Nenhum registro encontrado...</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+
+                    <div class="form-group">
+
+                        <button type="button" class="btn btn-default" data-ng-click="cancelarInclusaoTitulos()" data-dismiss="modal" aria-label="Close">Fechar</button>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+

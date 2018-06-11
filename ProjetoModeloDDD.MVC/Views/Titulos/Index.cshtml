@@ -1,0 +1,121 @@
+﻿@model IEnumerable<SASF.MVC.ViewModels.FuncionarioViewModel>
+
+<h2>Cadastro de Titulos</h2>
+<link href="/Content/animations.css" rel="stylesheet" type="text/css">
+<link href="~/Content/animations.css" rel="stylesheet" />
+@section Scripts {
+    @Scripts.Render("~/bundles/angular")
+    @Scripts.Render("~/bundles/angularTitulos")
+}
+
+
+<div ng-app="TitulosApp" ng-controller="TitulosCtrl">
+
+    <form name="formDados" novalidate>
+
+        <fieldset class="scheduler-border">
+            <legend class="scheduler-border">Pesquisar</legend>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="control-label">Código do Título:</label>
+
+                        <input class="form-control" @*type="search"*@ ng-model="model.Procurar" placeholder="Pesquisar Número do Título" aria-label="Pesquisar Número do Título" ng-maxlength="100" />
+                        <div class="center" data-ng-show="loader">
+                            <img src="~/Images/ajax-loader.gif" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+
+                <div class="col-md-2" data-ng-show="!loader">
+                    <div class="form-group">
+                        <button type="button" data-ng-click="pesquisarTitulos()" class="btn btn-primary">
+                            <span class="glyphicon glyphicon-search" aria-hidden="true"></span> Pesquisar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+
+        <fieldset class="scheduler-border">
+            <legend class="scheduler-border">Registros</legend>
+
+            @*INFO: Alerta*@
+            <div class="row" data-ng-show="show.erro">
+                <div class="col-md-12">
+                    <div class="alert alert-dismissable alert-danger">
+                        <h4>Atenção!</h4>
+                        {{ show.erro }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="alert alert-dismissable alert-info">
+                        <h4>Atenção!</h4>
+                       * Aqui você poderá administrar cada Título que foi inserido.<br />
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                
+                <table class="table table-hover">
+                    <tr class="active">
+                        <th style="cursor:pointer" ng-click="ordenar('TituloId')">Código <span class="glyphicon glyphicon-sort"></span></th>
+                        <th style="cursor:pointer" ng-click="ordenar('Status')">Status <span class="glyphicon glyphicon-sort"></span></th>
+                        <th style="cursor:pointer" ng-click="ordenar('FichaNome')">Cliente <span class="glyphicon glyphicon-sort"></span></th>
+                        <th style="cursor:pointer" ng-click="ordenar('Valor')">Valor <span class="glyphicon glyphicon-sort"></span></th>
+                        <th style="cursor:pointer" ng-click="ordenar('Mes')">Mes <span class="glyphicon glyphicon-sort"></span></th>
+                        <th>Ações</th>
+                    </tr>
+                    <tr class="animate-repeat" data-ng-show="titulo">
+
+                        <td> {{titulo.TituloId}}</td>
+                        <td>{{titulo.Status}}</td>
+                        <td>{{titulo.FichaNome}}</td>
+                        <td>{{titulo.Valor}}</td>
+                        <td>{{titulo.Mes}}</td>
+
+                        <td>
+                            <div class="row">
+
+                                <div class="col-md-9">
+
+                                    <select class="form-control"
+                                            name="Status"
+                                            id="Status"
+                                            data-ng-model="titulo.Status"
+                                            ng-change="confirmarAlteracao()">
+                                        <option value="P">Pendente Pagamento</option>
+                                        <option value="B">Baixado</option>
+                                    </select>
+                                </div>
+
+                            </div>
+
+                        </td>
+                    </tr>
+
+                </table>
+                <div class="alert alert-danger" data-ng-show="show.erro">
+                    <strong>Nenhum registro encontrado...</strong>
+                </div>
+
+                @*<dir-pagination-controls max-size="5" boundary-links="true"></dir-pagination-controls>*@
+
+                @*<p>
+            <b>Qtde. Titulos:</b> {{titulos.length}}
+        </p>*@
+
+            </div>
+
+        </fieldset>
+
+    </form>
+</div>
+
